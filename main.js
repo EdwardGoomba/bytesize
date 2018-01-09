@@ -8,7 +8,7 @@ const $expandButton = $('#expand');
 const $shortenButton = $('#shorten');
 const $responseField = $('#responseField');
 
-// AJAX functions using promises
+// AJAX functions
 function expandUrl() {
 	const urlToExpand = url + '?shortUrl=' + $inputField.val() + '&key=' + apiKey;
 	fetch(urlToExpand).then(response => {
@@ -18,7 +18,10 @@ function expandUrl() {
 		throw new Error('Request failed!');
 	}, networkError => {
 		console.log(networkError.message);
-	});
+	}).then(jsonResponse => {
+    $responseField.append('<p> Your expanded URL is </p><p> ' + jsonResponse.longUrl + '</p>');
+return jsonResponse;
+  });
 };
 
 function shortenUrl() {};
