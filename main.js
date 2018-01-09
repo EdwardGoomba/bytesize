@@ -1,5 +1,5 @@
 // Include data for accessing Google APIs
-const apiKey = 'AIzaSyCqcfIN-D5Y-_XMl5FovjEVBl2QLlX4-NE';
+const apiKey = your-api-key;
 const url = 'https://www.googleapis.com/urlshortener/v1/url';
 
 // Some page elements
@@ -24,7 +24,25 @@ return jsonResponse;
   });
 };
 
-function shortenUrl() {};
+function shortenUrl() {
+  const urlWithKey = url + '?key=' + apiKey;
+	const urlToShorten = $inputField.val();
+
+  fetch(urlWithKey, {
+    method: 'POST',
+    headers: {
+ "Content-type": "application/json"
+},
+    body: JSON.stringify({longUrl: urlToShorten})
+  }).then((response) => {
+    if(response.ok) {
+      return response.json();
+    }
+    throw new Error('Request failed!');
+  },
+  networkError => console.log(networkError.message)
+  );
+};
 
 function expand() {
 	$responseField.empty();
