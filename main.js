@@ -1,59 +1,39 @@
 // Include data for accessing Google APIs
-
 const apiKey = 'AIzaSyCqcfIN-D5Y-_XMl5FovjEVBl2QLlX4-NE';
 const url = 'https://www.googleapis.com/urlshortener/v1/url';
-const projection = 'FULL';
 
 // Some page elements
-
 const $inputField = $('#input');
 const $expandButton = $('#expand');
 const $shortenButton = $('#shorten');
 const $responseField = $('#responseField');
 
-// AJAX functions
-
+// AJAX functions using promises
 function expandUrl() {
-	const urlToExpand = url + '?key=' + apiKey + '&shortUrl=' + $inputField.val();
+	const urlToExpand = url + '?shortUrl=' + $inputField.val() + '&key=' + apiKey;
+	fetch(urlToExpand).then(response => {
+		if (response.ok) {
+			return response.json();
+		}
+		throw new Error('Request failed!');
+	}, networkError => {
+		console.log(networkError.message);
+	});
+};
 
-  $.getJSON(urlToExpand, response => {
-  $responseField.append('<p>Your expanded url is: </p><p>' +
-  response.longUrl + '</p>');
-});
-}
-
-function shortenUrl() {
-	const urlWithKey = url + '?key=' + apiKey;
-  const urlToShorten = $inputField.val();
-
-  $.post({
-    url: urlWithKey,
-    data: JSON.stringify({longUrl: urlToShorten}),
-    dataType: 'json',
-    contentType: 'application/json',
-    success(response) {
-      $responseField.append('<p>Your shortened url is: </p><p>' + response.id + '</p>');
-    },
-    error(jqXHR, status, errorThrown) {
-      console.log(jqXHR);
-    }
-
-  });
-  }
+function shortenUrl() {};
 
 function expand() {
-  $responseField.empty();
-  expandUrl();
-  return false;
-}
+	$responseField.empty();
+	expandUrl();
+	return false;
+};
 
 function shorten() {
-  $responseField.empty();
-  shortenUrl();
-  return false;
-}
-
-// Call functions on submit
+	$responseField.empty();
+	shortenUrl();
+	return false;
+};
 
 $expandButton.click(expand);
 $shortenButton.click(shorten);
