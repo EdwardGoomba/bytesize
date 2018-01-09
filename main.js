@@ -16,17 +16,10 @@ const $responseField = $('#responseField');
 function expandUrl() {
 	const urlToExpand = url + '?key=' + apiKey + '&shortUrl=' + $inputField.val();
 
-  $.ajax({
-    url: urlToExpand,
-    type: 'GET',
-    dataType: 'json',
-    success(response) {
-      $responseField.append('<p>Your expanded url is: </p><p>' + response.longUrl + '</p>');
-    },
-    error(jqXHR, status, errorThrown) {
-      console.log(jqXHR);
-    }
-  });
+  $.get(urlToExpand, response => {
+  $responseField.append('<p>Your expanded url is: </p><p>' +
+  response.longUrl + '</p>');
+}, 'json');
 }
 
 function shortenUrl() {
