@@ -1,6 +1,6 @@
 // Include data for accessing Google APIs
 
-const apiKey = your-api-code-here;
+const apiKey = 'AIzaSyCqcfIN-D5Y-_XMl5FovjEVBl2QLlX4-NE';
 const url = 'https://www.googleapis.com/urlshortener/v1/url';
 const projection = 'FULL';
 
@@ -29,7 +29,21 @@ function expandUrl() {
 }
 
 function shortenUrl() {
+	const urlWithKey = url + '?key=' + apiKey;
+  const urlToShorten = $inputField.val();
+  const data = JSON.stringify({longUrl: urlToShorten});
 
+  const xhr = new XMLHttpRequest();
+  xhr.responseType = 'json';
+  xhr.onreadystatechange = function() {
+		if (xhr.readyState === XMLHttpRequest.DONE) {
+			$responseField.append('<p>Your shortened url is: </p><p>' + xhr.response.id + '</p>');
+		}
+  }
+
+  xhr.open('POST', urlWithKey);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.send(data);
 }
 
 function expand() {
