@@ -32,20 +32,22 @@ function expandUrl() {
 function shortenUrl() {
 	const urlWithKey = url + '?key=' + apiKey;
   const urlToShorten = $inputField.val();
-  const data = JSON.stringify({longUrl: urlToShorten});
 
-  const xhr = new XMLHttpRequest();
-  xhr.responseType = 'json';
-  xhr.onreadystatechange = function() {
-		if (xhr.readyState === XMLHttpRequest.DONE) {
-			$responseField.append('<p>Your shortened url is: </p><p>' + xhr.response.id + '</p>');
-		}
+  $.ajax({
+    url: urlWithKey,
+    type: 'POST',
+    data: JSON.stringify({longUrl: urlToShorten}),
+    dataType: 'json',
+    contentType: 'application/json',
+    success(response) {
+      $responseField.append('<p>Your shortened url is: </p><p>' + response.id + '</p>');
+    },
+    error(jqXHR, status, errorThrown) {
+      console.log(jqXHR);
+    }
+
+  });
   }
-
-  xhr.open('POST', urlWithKey);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.send(data);
-}
 
 function expand() {
   $responseField.empty();
